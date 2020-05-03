@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h3>{{user.name}}<small> (<a href="PLACEHOLDER_URL_TITLE/similar">Similar</a>)</small></h3>
+  <ul>
+  {% for page in user.pages %}
+    <li><a href={{page.urlTitle}}>{{page.title}}</a></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
