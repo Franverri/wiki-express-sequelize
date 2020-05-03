@@ -101,12 +101,106 @@ Para estos casos Sequelize tiene getters los cuales nos permiten crear campos vi
 
 Ahora necesitaremos modificar las rutas de Express para manejar los request tanto de creación como obtención de datos desde nuestro esquema:
 
-  * GET /wiki/: Obtiene todas las páginas creadas
-  * POST /wiki/: Agrega una nueva página a la base de datos
-  * GET /wiki/add: Obtiene el template del formulario para crear una nueva página
-  * GET /users/: Obtiene todos los usuarios
-  * GET /users/123: Obtiene los datos del usuario '123'
+  * __GET /wiki/__: Obtiene todas las páginas creadas
+  * __GET /wiki/:urlTitle__ : Obtiene todos los datos de una página en particular cuyo urlTitle corresponda con el indicado
+  * __POST /wiki/__: Agrega una nueva página a la base de datos
+  * __GET /users/__: Obtiene todos los usuarios
+  * __GET /users/:id__ : Obtiene los datos del usuario cuyo id corresponda con el indicado
 
 *Los template de las rutas ya se encuentran creados dentro de la carpeta `routes` solo es necesario modificarlos donde se indica*
 
-TO-DO: Explicar con mayor detalle que hacer en cada ruta
+#### Sequelize Query
+
+Para obtener datos de la base de datos creada por Sequelize debemos utilizar su modelo de consulta que podemos encontrar explicado en detalle en los siguientes dos links:
+
+  * [Consultas básicas](https://sequelize.org/master/manual/model-querying-basics.html)
+  * [Consultas de búsqueda](https://sequelize.org/master/manual/model-querying-finders.html)
+
+#### GET /wiki/
+
+Modificar el archivo `index.js` de la carpeta `routes` y utilizar el método `findAll` de Sequelize para obtener todas las páginas creadas hasta el momento. Luego con la respuesta renderizar el `index` pasándole como argumento la respuesta de la consulta realizada.
+
+```js
+router.get('/', function(req, res){
+  // Modificar para renderizar todas las páginas creadas que se encuentren
+  // dento de la base de datos
+  // Tu código acá:
+
+  // 1. Utilizar Page.findAll()
+  // 2. Capturar la respuesta con lo ya visto en Express (Utilizar then())
+  // 3. Renderizar la página "index" usando res.render('index', {pages}) (Donde {pages} es la respuesta del request)
+
+  res.render('index');
+})
+```
+
+#### GET /wiki/:urlTitle
+
+Modificar el archivo `wiki.js` de la carpeta `routes` y utilizar el método `findOne` de Sequelize para obtener una página en particular (La que coincida con el urlTitle indicado). Luego con la respuesta renderizar el `wikipage` pasándole como argumento la respuesta de la consulta realizada.
+
+```js
+router.get('/:urlTitle', function(req, res) {
+  // Modificar para que cuando se seleccione un "Page" en particular se muestren
+  // los datos asociados al mismo
+  // Tu código acá:
+
+  // 1. Utilizar Page.findOne() pasándole como parámetro el urlTitle
+  // 2. Capturar la respuesta utilizando then()
+  // 3. Renderizar la página "wikipage" usando res.render('wikipage', {page}) (Donde {page} es la respuesta del request)
+
+  res.render('wikipage');
+})
+```
+
+#### POST /wiki/
+
+Modificar el archivo `wiki.js` de la carpeta `routes` y utilizar el método `create` de Sequelize para crear y gurdar un nuevo registro dentro de la tabla de páginas. Una vez creada exitosamente redirigir hacia la pantalla de la página recientemente creada.
+
+```js
+router.post('/', function(req, res, next) {
+  // Modificar para que cuando se clickee el botón de "SUBMIT" se cree un nuevo post
+  // tomando los datos desde el form y agregándolo a la base de datos
+  // Tu código acá:
+
+  // 1. Utilizar el método findOrCreate para obtener el usuario o crear uno nuevo en el caso de que no exista
+  // 2. Capturar la respuesta del punto 1 con then() y a partir de ella y de los datos almacenados en `req`
+  //    crear una nueva página utilizando el método `create`
+  // 3. Capturar la respuesta del punto 2 con then() y redirigir hacía la pantalla cuyo URL obtendremos de 'page.urlTitle'
+  res.render('index');
+});
+```
+
+#### GET /users/
+
+Modificar el archivo `users.js` de la carpeta `routes` y utilizar el método `findAll` de Sequelize para obtener todos los usuarios creados hasta el momento. Luego con la respuesta renderizar el `users` pasándole como argumento la respuesta de la consulta realizada.
+
+```js
+router.get('/', function(req, res, next){
+  // Modificar para renderizar todas los usuarios que se encuentren
+  // dento de la base de datos
+  // Tu código acá:
+
+  // 1. Utilizar User.findAll()
+  // 2. Capturar la respuesta con then()
+  // 3. Renderizar la página "users" usando res.render('users', {users}) (Donde {users} es la respuesta del request)
+
+  res.render('users');
+});
+```
+
+#### GET /users/:id
+
+Modificar el archivo `users.js` de la carpeta `routes` y utilizar el método `findById` de Sequelize para obtener un usuario en particular (El que coincida con el ID indicado). Luego con la respuesta renderizar el `unUsuarioEnParticular` pasándole como argumento la respuesta de la consulta realizada.
+
+```js
+router.get('/:id', function(req, res){
+  // Modificar para renderizar los datos del usuario seleccionado
+  // Tu código acá:
+
+  // 1. Utilizar User.findById() pasándole como parámetro el id
+  // 2. Capturar la respuesta utilizando then()
+  // 3. Renderizar la página "unUsuarioEnParticular" usando res.render('unUsuarioEnParticular', {user}) (Donde {user} es la respuesta del request)
+
+  res.render('unUsuarioEnParticular');
+});
+```
