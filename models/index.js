@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 const S = Sequelize;
-var db = new Sequelize('postgres://localhost:5432/wikistack', {
+var db = new Sequelize('postgres://localhost:5432/henryblog', {
   logging: false,
 });
 
